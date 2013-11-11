@@ -19,6 +19,7 @@ MainWindow::~MainWindow()
 {
   delete mp_menubar;
   delete mp_menu_file;
+  delete mp_menu_help;
 }
 
 /***************************************
@@ -38,13 +39,21 @@ void MainWindow::create_menus()
   mp_menu_filemenu->append(*mp_menu_file_sep1);
   mp_menu_filemenu->append(*mp_menu_file_quit);
 
+  ////////// Help //////////
+  mp_menu_helpmenu = new Gtk::Menu();
+  mp_menu_help_about = new Gtk::MenuItem("About");
+  mp_menu_helpmenu->append(*mp_menu_help_about);
+
   ////////// The menubar //////////
   mp_menubar   = new Gtk::MenuBar();
   mp_menu_file = new Gtk::MenuItem("File");
+  mp_menu_help = new Gtk::MenuItem("Help");
 
   mp_menu_file->set_submenu(*mp_menu_filemenu);
+  mp_menu_help->set_submenu(*mp_menu_helpmenu);
 
   mp_menubar->append(*mp_menu_file);
+  mp_menubar->append(*mp_menu_help);
 }
 
 void MainWindow::setup_signal_handlers()
@@ -52,6 +61,7 @@ void MainWindow::setup_signal_handlers()
   mp_menu_file_new->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_new));
   mp_menu_file_open->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_open));
   mp_menu_file_quit->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_quit));
+  mp_menu_help_about->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_help_about));
 }
 
 void MainWindow::create_layout()
@@ -76,6 +86,11 @@ void MainWindow::on_menu_file_new()
 }
 
 void MainWindow::on_menu_file_open()
+{
+
+}
+
+void MainWindow::on_menu_help_about()
 {
 
 }
