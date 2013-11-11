@@ -13,6 +13,8 @@ private:
   void setup_signal_handlers();
   void create_layout();
 
+  void reload_workspace();
+
   void on_menu_file_new();
   void on_menu_file_open();
   void on_menu_file_quit();
@@ -30,6 +32,9 @@ private:
   Gtk::MenuItem* mp_menu_file_quit;
   Gtk::MenuItem* mp_menu_help_about;
   Gtk::MenuBar* mp_menubar;
+
+  Glib::ustring m_csv_file;
+  Glib::ustring m_img_file;
 };
 
 #endif

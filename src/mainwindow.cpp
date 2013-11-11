@@ -82,7 +82,39 @@ void MainWindow::on_menu_file_quit()
 
 void MainWindow::on_menu_file_new()
 {
+  Glib::RefPtr<Gtk::FileFilter> csv_filter = Gtk::FileFilter::create();
+  Glib::RefPtr<Gtk::FileFilter> img_filter = Gtk::FileFilter::create();
+  Glib::RefPtr<Gtk::FileFilter> any_filter = Gtk::FileFilter::create();
+  csv_filter->set_name("Comma-separated value files (*.csv)");
+  csv_filter->add_pattern("*.csv");
+  img_filter->set_name("Image files (*.png)");
+  img_filter->add_pattern("*.png");
+  any_filter->set_name("Any files (*)");
+  any_filter->add_pattern("*");
 
+  Gtk::FileChooserDialog csv_fd(*this, "Choose the passability file", Gtk::FILE_CHOOSER_ACTION_SAVE);
+  csv_fd.add_filter(csv_filter);
+  csv_fd.add_filter(any_filter);
+  csv_fd.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+  csv_fd.add_button("OK", Gtk::RESPONSE_OK);
+
+  Gtk::FileChooserDialog img_fd(*this, "Choose the tileset image file", Gtk::FILE_CHOOSER_ACTION_OPEN);
+  img_fd.add_filter(img_filter);
+  img_fd.add_filter(any_filter);
+  img_fd.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+  img_fd.add_button("OK", Gtk::RESPONSE_OK);
+
+  if (csv_fd.run() != Gtk::RESPONSE_OK)
+    return;
+  csv_fd.hide();
+
+  if (img_fd.run() != Gtk::RESPONSE_OK)
+    return;
+
+  m_csv_file = Glib::filename_to_utf8(csv_fd.get_filename());
+  m_img_file = Glib::filename_to_utf8(img_fd.get_filename());
+
+  reload_workspace();
 }
 
 void MainWindow::on_menu_file_open()
@@ -96,4 +128,9 @@ void MainWindow::on_menu_help_about()
   ad.set_version("0.0.1");
   ad.set_copyright("Copyright © 2013 Marvin Gülker");
   ad.run();
+}
+
+void MainWindow::reload_workspace()
+{
+  
 }
