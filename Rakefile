@@ -8,7 +8,7 @@ require "yaml"
 
 CC       = ENV["CC"]       || "gcc"
 CXX      = ENV["CXX"]      || "g++"
-CFLAGS   = ENV["CFLAGS"]   || "-Wall "
+CFLAGS   = ENV["CFLAGS"]   || "-Wall -g "
 CXXFLAGS = ENV["CXXFLAGS"] || ""
 LDFLAGS  = ENV["LDFLAGS"]  || ""
 LIBS     = ENV["LIBS"]     || ""
@@ -20,6 +20,29 @@ cobjectfiles   = sourcesfiles.select{|path| File.extname(path) == ".c"}.map{|pat
 cppobjectfiles = sourcesfiles.select{|path| File.extname(path) == ".cpp"}.map{|path| File.join("objects", File.basename(path.sub(/\.cpp$/, ".cppobj")))}
 objectfiles    = cobjectfiles + cppobjectfiles
 starttime      = Time.now
+
+########################################
+# Monkeypatch
+# We want to invoke the prerequisites of
+# a `file' task concurrently, which is not
+# suppoted by Rake out of the box.
+
+class Rake::MultiFileTask < Rake::Task
+
+  def invoke_prerequisites(*args)
+    invoke_prerequisites_concurrently(*args)
+  end
+
+end
+
+module Rake::DSL
+
+  private
+  def multifile(*args, &block)
+    Rake::MultiFileTask.define_task(*args, &block)
+  end
+
+end
 
 ########################################
 # Helper methods
@@ -62,19 +85,15 @@ end
 # somewhere in the source tree
 Dir.chdir(Rake.original_dir)
 
-rule %r{objects/.*\.cobj$} => ["#{sourcedir}/%n.c"] do |t|
-  mkdir "objects" unless File.directory?("objects")
-
+rule %r{objects/.*\.cobj$} => ["#{sourcedir}/%n.c", "#{sourcedir}/%n.h"] do |t|
   sh "#{CC} -c #{CFLAGS} #{t.source} -o #{t.name}"
 end
 
-rule %r{objects/.*\.cppobj} => ["#{sourcedir}/%n.cpp"] do |t|
-  mkdir "objects" unless File.directory?("objects")
-
+rule %r{objects/.*\.cppobj} => ["#{sourcedir}/%n.cpp", "#{sourcedir}/%n.hpp"] do |t|
   sh "#{CXX} -c #{CFLAGS} #{CXXFLAGS} #{t.source} -o #{t.name}"
 end
 
-file "tilepass" => objectfiles do |t|
+multifile "tilepass" => objectfiles do |t|
   sh "#{CXX} #{LDFLAGS} #{t.prerequisites.join(' ')} -o #{t.name} #{LIBS}"
 end
 
@@ -87,7 +106,9 @@ file "buildconfig.yml" do
   end
 end
 
-task :configure => "buildconfig.yml" do
+directory "objects"
+
+task :configure => ["objects", "buildconfig.yml"] do
   hsh = YAML.load_file("buildconfig.yml")
 
   CFLAGS.replace(hsh["cflags"])
