@@ -19,6 +19,7 @@ private:
   void on_menu_help_about();
 
   Gtk::VBox m_vbox;
+
   Gtk::MenuItem* mp_menu_file;
   Gtk::MenuItem* mp_menu_help;
   Gtk::Menu* mp_menu_filemenu;

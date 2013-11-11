@@ -92,5 +92,8 @@ void MainWindow::on_menu_file_open()
 
 void MainWindow::on_menu_help_about()
 {
-
+  Gtk::AboutDialog ad;
+  ad.set_version("0.0.1");
+  ad.set_copyright("Copyright © 2013 Marvin Gülker");
+  ad.run();
 }
