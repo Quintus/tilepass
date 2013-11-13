@@ -1,6 +1,7 @@
 #include "mainwindow.hpp"
 
 MainWindow::MainWindow()
+  : Gtk::Window(), m_vsep1(Gtk::ORIENTATION_VERTICAL)
 {
   mp_menubar = NULL;
 
@@ -68,6 +69,7 @@ void MainWindow::create_layout()
   m_vbox.pack_start(*mp_menubar, Gtk::PACK_SHRINK);
   m_vbox.pack_start(m_hbox, Gtk::PACK_EXPAND_WIDGET);
   m_hbox.pack_start(m_vbox2, Gtk::PACK_EXPAND_WIDGET);
+  m_hbox.pack_start(m_vsep1, Gtk::PACK_SHRINK);
   m_hbox.pack_start(m_tileset, Gtk::PACK_EXPAND_WIDGET);
 
   add(m_vbox);

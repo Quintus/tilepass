@@ -26,6 +26,7 @@ private:
   Gtk::VBox m_vbox2;
 
   TilesetImage m_tileset;
+  Gtk::Separator m_vsep1;
 
   Gtk::MenuItem* mp_menu_file;
   Gtk::MenuItem* mp_menu_help;
