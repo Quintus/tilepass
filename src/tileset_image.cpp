@@ -3,25 +3,24 @@
 TilesetImage::TilesetImage()
   : ScrolledWindow()
 {
-  mp_draw_area = new Gtk::DrawingArea();
-  add(*mp_draw_area);
+  add(m_draw_area);
 
   set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
 
-  mp_draw_area->signal_draw().connect(sigc::mem_fun(*this, &TilesetImage::on_area_draw));
+  m_draw_area.signal_draw().connect(sigc::mem_fun(*this, &TilesetImage::on_area_draw));
   show_all_children();
 }
 
 TilesetImage::~TilesetImage()
 {
-  delete mp_draw_area;
+  //
 }
 
 void TilesetImage::set_filename(Glib::ustring filename)
 {
   m_filename = filename;
   mp_pixbuf = Gdk::Pixbuf::create_from_file(filename);
-  mp_draw_area->set_size_request(mp_pixbuf->get_width(), mp_pixbuf->get_height());
+  m_draw_area.set_size_request(mp_pixbuf->get_width(), mp_pixbuf->get_height());
 }
 
 Glib::ustring TilesetImage::get_filename()

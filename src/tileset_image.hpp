@@ -15,7 +15,7 @@ public:
 protected:
   virtual bool on_area_draw(const Cairo::RefPtr<Cairo::Context>& cc);
 
-  Gtk::DrawingArea* mp_draw_area;
+  Gtk::DrawingArea m_draw_area;
   Glib::ustring m_filename;
   Glib::RefPtr<Gdk::Pixbuf> mp_pixbuf;
 };
