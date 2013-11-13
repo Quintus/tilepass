@@ -66,9 +66,6 @@ bool ArrowTile::on_draw(const Cairo::RefPtr<Cairo::Context>& cc)
     cc->paint();
     Gdk::Cairo::set_source_pixbuf(cc, mp_leftarrow, 0, s_arrowedge + 2 * s_arrowdistance);
     cc->paint();
-    cc->set_source_rgb(1, 0, 0);
-    cc->rectangle(s_arrowedge + s_arrowdistance, s_arrowedge + s_arrowdistance, 32, 32);
-    cc->fill();
     Gdk::Cairo::set_source_pixbuf(cc, mp_tile, s_arrowedge + s_arrowdistance, s_arrowedge + s_arrowdistance);
     cc->paint();
     Gdk::Cairo::set_source_pixbuf(cc, mp_rightarrow, s_arrowedge + 2 * s_arrowdistance + s_tileedge, s_arrowedge + 2 * s_arrowdistance);

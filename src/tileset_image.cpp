@@ -121,8 +121,19 @@ int TilesetImage::columns()
 bool TilesetImage::on_area_draw(const Cairo::RefPtr<Cairo::Context>& cc)
 {
   if (!m_filename.empty()) {
+    // Paint the tileset itself
     Gdk::Cairo::set_source_pixbuf(cc, mp_pixbuf, 0, 0);
     cc->paint();
+
+    // Highlight the currently selected tile
+    cc->set_source_rgb(0, 0, 0);
+    cc->rectangle(m_current_x * m_tileedge, m_current_y * m_tileedge, m_tileedge, m_tileedge);
+    cc->set_line_width(6);
+    cc->stroke();
+    cc->set_source_rgb(1, 1, 1);
+    cc->rectangle(m_current_x * m_tileedge, m_current_y * m_tileedge, m_tileedge, m_tileedge);
+    cc->set_line_width(4);
+    cc->stroke();
 
     return true;
   }
