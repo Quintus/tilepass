@@ -5,12 +5,20 @@
  ***************************************/
 
 MainWindow::MainWindow()
-  : Gtk::Window(), m_vsep1(Gtk::ORIENTATION_VERTICAL)
+  : Gtk::Window(),
+    m_vsep1(Gtk::ORIENTATION_VERTICAL),
+    m_hsep1(Gtk::ORIENTATION_HORIZONTAL),
+    m_align1(0.5, 0.5, 0, 0)
 {
   mp_menubar = NULL;
 
   set_title("Test");
-  set_default_size(200, 200);
+  set_default_size(400, 500);
+
+  m_progress_label.set_text("Progress:");
+  m_progress_label.set_alignment(Gtk::ALIGN_START);
+  m_next_button.set_label("Next");
+  m_prev_button.set_label("Previous");
 
   create_menus();
   create_layout();
@@ -73,7 +81,20 @@ void MainWindow::create_layout()
   m_vbox.pack_start(*mp_menubar, Gtk::PACK_SHRINK);
   m_vbox.pack_start(m_hbox, Gtk::PACK_EXPAND_WIDGET);
   m_hbox.pack_start(m_vbox2, Gtk::PACK_EXPAND_WIDGET);
-  m_vbox2.pack_start(m_arrowtile, Gtk::PACK_SHRINK);
+
+  m_vbox2.set_spacing(10);
+  m_align1.add(m_arrowtile);
+  m_vbox2.pack_start(m_align1, Gtk::PACK_EXPAND_WIDGET);
+  m_vbox2.pack_start(m_progress_label, Gtk::PACK_SHRINK);
+  m_vbox2.pack_start(m_progress_bar, Gtk::PACK_SHRINK);
+  m_vbox2.pack_start(m_hsep1, Gtk::PACK_SHRINK);
+  m_vbox2.pack_start(m_hbox2, Gtk::PACK_SHRINK);
+
+  m_hbox2.set_border_width(20);
+  m_hbox2.set_spacing(20);
+  m_hbox2.pack_end(m_next_button, Gtk::PACK_SHRINK);
+  m_hbox2.pack_end(m_prev_button, Gtk::PACK_SHRINK);
+
   m_hbox.pack_start(m_vsep1, Gtk::PACK_SHRINK);
   m_hbox.pack_start(m_tileset, Gtk::PACK_EXPAND_WIDGET);
 
@@ -139,7 +160,16 @@ void MainWindow::on_menu_help_about()
   ad.run();
 }
 
+/***************************************
+ * Helper methods
+ ***************************************/
+
 void MainWindow::reload_workspace()
 {
   m_tileset.set_filename(m_img_file);
+}
+
+void MainWindow::update_progress()
+{
+  
 }

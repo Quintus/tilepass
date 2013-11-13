@@ -18,6 +18,8 @@ private:
 
   /// Reloads all widgets after selecting a new file
   void reload_workspace();
+  // Updates the progress bar to the current amount of work done.
+  void update_progress();
 
   // Event handlers
   void on_menu_file_new();
@@ -28,10 +30,17 @@ private:
   Gtk::VBox m_vbox;
   Gtk::HBox m_hbox;
   Gtk::VBox m_vbox2;
+  Gtk::HBox m_hbox2;
 
   TilesetImage m_tileset;
   ArrowTile m_arrowtile;
+  Gtk::Button m_next_button;
+  Gtk::Button m_prev_button;
+  Gtk::Label m_progress_label;
+  Gtk::ProgressBar m_progress_bar;
   Gtk::Separator m_vsep1;
+  Gtk::Separator m_hsep1;
+  Gtk::Alignment m_align1;
 
   Gtk::MenuItem* mp_menu_file;
   Gtk::MenuItem* mp_menu_help;
