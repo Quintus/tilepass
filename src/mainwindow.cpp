@@ -167,6 +167,7 @@ void MainWindow::on_menu_help_about()
 void MainWindow::reload_workspace()
 {
   m_tileset.load_tileset(m_img_file, 32); // FIXME: Make tile edge length configurable
+  m_arrowtile.set_tile(m_tileset.get_current_tile());
 }
 
 void MainWindow::update_progress()
