@@ -15,34 +15,10 @@ LIBS     = ENV["LIBS"]     || ""
 
 rakefiledir    = Pathname.new(__FILE__).expand_path.dirname
 sourcedir      = rakefiledir.join("src").relative_path_from(Pathname.new(Rake.original_dir)).to_s
-sourcesfiles   = Dir["src/**/*.{c,cpp,h,hpp}"]
-cobjectfiles   = sourcesfiles.select{|path| File.extname(path) == ".c"}.map{|path| File.join("objects", File.basename(path.sub(/\.c$/, ".cobj")))}
+sourcesfiles   = Dir["src/**/*.cpp"]
 cppobjectfiles = sourcesfiles.select{|path| File.extname(path) == ".cpp"}.map{|path| File.join("objects", File.basename(path.sub(/\.cpp$/, ".cppobj")))}
-objectfiles    = cobjectfiles + cppobjectfiles
+objectfiles    = cppobjectfiles
 starttime      = Time.now
-
-########################################
-# Monkeypatch
-# We want to invoke the prerequisites of
-# a `file' task concurrently, which is not
-# suppoted by Rake out of the box.
-
-class Rake::MultiFileTask < Rake::Task
-
-  def invoke_prerequisites(*args)
-    invoke_prerequisites_concurrently(*args)
-  end
-
-end
-
-module Rake::DSL
-
-  private
-  def multifile(*args, &block)
-    Rake::MultiFileTask.define_task(*args, &block)
-  end
-
-end
 
 ########################################
 # Helper methods
@@ -89,11 +65,11 @@ rule %r{objects/.*\.cobj$} => ["#{sourcedir}/%n.c", "#{sourcedir}/%n.h"] do |t|
   sh "#{CC} -c #{CFLAGS} #{t.source} -o #{t.name}"
 end
 
-rule %r{objects/.*\.cppobj} => ["#{sourcedir}/%n.cpp", "#{sourcedir}/%n.hpp"] do |t|
+rule %r{objects/.*\.cppobj} => ["#{sourcedir}/%n.cpp"] do |t|
   sh "#{CXX} -c #{CFLAGS} #{CXXFLAGS} #{t.source} -o #{t.name}"
 end
 
-multifile "tilepass" => objectfiles do |t|
+file "tilepass" => objectfiles do |t|
   sh "#{CXX} #{LDFLAGS} #{t.prerequisites.join(' ')} -o #{t.name} #{LIBS}"
 end
 
@@ -125,7 +101,47 @@ task :configure => ["objects", "buildconfig.yml"] do
   puts
 end
 
-task :compile => [:configure, "tilepass"]
+def scan_file_for_dependencies(path, dependencies = [])
+  path = Pathname.new(path)
+
+  # Change to the file's directory so we resolve #include-s
+  # properly.
+  Dir.chdir(path.dirname) do
+    path.basename.open do |f|
+      f.each_line do |line|
+        if line =~ /^#\s*include "(.*)"$/
+          fullpath = Pathname.new($1).expand_path
+
+          # 0. If we already have this file as a dependency, ignore it
+          next if dependencies.include?(fullpath)
+
+          # 1. Add the found file's absolute path to the dependency list
+          dependencies << fullpath
+
+          # 2. Read in the file and repeat the process
+          scan_file_for_dependencies(fullpath, dependencies)
+        end
+      end
+    end
+  end
+
+  dependencies
+end
+
+task :scandeps do
+  cppobjectfiles.each do |cpppath|
+    task = Rake::Task[cpppath]
+    deps = []
+
+    task.prerequisites.each do |sourcepath|
+      deps.concat(scan_file_for_dependencies(sourcepath))
+    end
+
+    task.prerequisites.concat(deps.map(&:to_s))
+  end
+end
+
+task :compile => [:configure, :scandeps, "tilepass"]
 
 task :default => :compile do
   puts green("Build complete. Time taken was #{(Time.now - starttime).round(2)} seconds.")
