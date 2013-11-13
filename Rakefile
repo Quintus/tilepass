@@ -11,7 +11,7 @@ CXX      = ENV["CXX"]      || "g++"
 CFLAGS   = ENV["CFLAGS"]   || "-Wall -g "
 CXXFLAGS = ENV["CXXFLAGS"] || ""
 LDFLAGS  = ENV["LDFLAGS"]  || ""
-LIBS     = ENV["LIBS"]     || ""
+LIBS     = ENV["LIBS"]     || " -lboost_filesystem -lboost_system "
 
 rakefiledir    = Pathname.new(__FILE__).expand_path.dirname
 sourcedir      = rakefiledir.join("src").relative_path_from(Pathname.new(Rake.original_dir)).to_s
@@ -52,6 +52,12 @@ end
 
 def bold(str)
   "\e[1m#{str}\e[0m"
+end
+
+def install_D(source, target)
+  puts "install -D '#{source}' '#{target}'"
+  FileUtils.mkdir_p(File.dirname(target))
+  FileUtils.cp(source, target)
 end
 
 ########################################
@@ -142,6 +148,21 @@ task :scandeps do
 end
 
 task :compile => [:configure, :scandeps, "tilepass"]
+
+task :install => :compile do
+  if ENV["DESTDIR"]
+    install_dir = Pathname.new(ENV["DESTDIR"])
+  else
+    warn "Warning: DESTDIR not specified. Assuming /usr/local."
+    install_dir = Pathname.new("/usr/local")
+  end
+
+  install_D "tilepass", install_dir + "bin" + "tilepass"
+  install_D rakefiledir + "data" + "go-down.png", install_dir + "share" + "tilepass" + "data" + "go-down.png"
+  install_D rakefiledir + "data" + "go-up.png", install_dir + "share" + "tilepass" + "data" + "go-up.png"
+  install_D rakefiledir + "data" + "go-previous.png", install_dir + "share" + "tilepass" + "data" + "go-previous.png"
+  install_D rakefiledir + "data" + "go-next.png", install_dir + "share" + "tilepass" + "data" + "go-next.png"
+end
 
 task :default => :compile do
   puts green("Build complete. Time taken was #{(Time.now - starttime).round(2)} seconds.")
