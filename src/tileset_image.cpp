@@ -1,13 +1,19 @@
 #include "tileset_image.hpp"
 
+/***************************************
+ * Constructors & Destructors
+ ***************************************/
+
 TilesetImage::TilesetImage()
   : ScrolledWindow()
 {
-  add(m_draw_area);
-
+  // Always show the scrollbars to prevet changing the size of
+  // the draw area on larger images
   set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
 
-  m_draw_area.signal_draw().connect(sigc::mem_fun(*this, &TilesetImage::on_area_draw));
+  create_layout();
+  setup_event_handlers();
+
   show_all_children();
 }
 
@@ -15,6 +21,24 @@ TilesetImage::~TilesetImage()
 {
   //
 }
+
+/***************************************
+ * Helper methods
+ ***************************************/
+
+void TilesetImage::create_layout()
+{
+ add(m_draw_area);
+}
+
+void TilesetImage::setup_event_handlers()
+{
+  m_draw_area.signal_draw().connect(sigc::mem_fun(*this, &TilesetImage::on_area_draw));
+}
+
+/***************************************
+ * Getters & Setters
+ ***************************************/
 
 void TilesetImage::set_filename(Glib::ustring filename)
 {
@@ -32,6 +56,10 @@ Glib::RefPtr<Gdk::Pixbuf> TilesetImage::get_pixbuf()
 {
   return mp_pixbuf;
 }
+
+/***************************************
+ * Signal handlers
+ ***************************************/
 
 bool TilesetImage::on_area_draw(const Cairo::RefPtr<Cairo::Context>& cc)
 {

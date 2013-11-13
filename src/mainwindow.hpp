@@ -10,12 +10,15 @@ public:
   virtual ~MainWindow();
 
 private:
+  // GUI helpers
   void create_menus();
   void setup_signal_handlers();
   void create_layout();
 
+  /// Reloads all widgets after selecting a new file
   void reload_workspace();
 
+  // Event handlers
   void on_menu_file_new();
   void on_menu_file_open();
   void on_menu_file_quit();

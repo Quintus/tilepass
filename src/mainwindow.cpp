@@ -1,5 +1,9 @@
 #include "mainwindow.hpp"
 
+/***************************************
+ * Constructors & Destructors
+ ***************************************/
+
 MainWindow::MainWindow()
   : Gtk::Window(), m_vsep1(Gtk::ORIENTATION_VERTICAL)
 {
