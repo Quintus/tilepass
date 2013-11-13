@@ -116,6 +116,16 @@ int TilesetImage::columns()
   return mp_pixbuf->get_width() / m_tileedge;
 }
 
+int TilesetImage::tiles_count()
+{
+  return rows() * columns();
+}
+
+int TilesetImage::get_current_tilenum()
+{
+  return m_current_y * columns() + m_current_x; // All tiles of previous rows plus the number of tiles in the current row
+}
+
 /***************************************
  * Signal handlers
  ***************************************/

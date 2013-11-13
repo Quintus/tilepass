@@ -17,6 +17,8 @@ MainWindow::MainWindow()
 
   m_progress_label.set_text("Progress:");
   m_progress_label.set_alignment(Gtk::ALIGN_START);
+  m_progress_bar.set_text("0/0");
+  m_progress_bar.set_show_text(true);
   m_next_button.set_label("Next");
   m_prev_button.set_label("Previous");
 
@@ -166,12 +168,14 @@ void MainWindow::on_next_button_clicked()
 {
   Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.next_tile();
   m_arrowtile.set_tile(p_pixbuf);
+  update_progress();
 }
 
 void MainWindow::on_prev_button_clicked()
 {
   Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.prev_tile();
   m_arrowtile.set_tile(p_pixbuf);
+  update_progress();
 }
 
 /***************************************
@@ -182,9 +186,19 @@ void MainWindow::reload_workspace()
 {
   m_tileset.load_tileset(m_img_file, 32); // FIXME: Make tile edge length configurable
   m_arrowtile.set_tile(m_tileset.get_current_tile());
+  update_progress();
 }
 
 void MainWindow::update_progress()
 {
-  
+  int total = m_tileset.tiles_count();
+  int current = m_tileset.get_current_tilenum();
+
+  // Update filling
+  m_progress_bar.set_fraction(static_cast<float>(current) / static_cast<float>(total));
+
+  // Update text
+  std::stringstream text;
+  text << current << "/" << total;
+  m_progress_bar.set_text(text.str());
 }

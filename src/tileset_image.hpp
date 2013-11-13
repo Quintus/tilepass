@@ -26,6 +26,10 @@ public:
   int rows();
   // Number of tiles in a row of the current tileset.
   int columns();
+  // Number of all tiles of the current tileset.
+  int tiles_count();
+  // The number of the current tile, 0-based.
+  int get_current_tilenum();
 
 protected:
   virtual bool on_area_draw(const Cairo::RefPtr<Cairo::Context>& cc);
