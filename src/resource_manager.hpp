@@ -10,6 +10,8 @@ public:
 
   boost::filesystem::path get_app_root_dir();
   boost::filesystem::path get_app_data_dir();
+  boost::filesystem::path get_resource(Glib::ustring basename);
+  Glib::RefPtr<Gdk::Pixbuf> get_image(Glib::ustring basename);
 private:
 
   boost::filesystem::path m_app_root_dir;

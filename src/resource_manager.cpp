@@ -45,3 +45,25 @@ fs::path ResourceManager::get_app_data_dir()
 {
   return m_app_root_dir / Glib::filename_from_utf8("share") / Glib::filename_from_utf8("tilepass") / Glib::filename_from_utf8("data");
 }
+
+fs::path ResourceManager::get_resource(Glib::ustring basename)
+{
+  return get_app_data_dir() / Glib::filename_from_utf8(basename);
+}
+
+Glib::RefPtr<Gdk::Pixbuf> ResourceManager::get_image(Glib::ustring basename)
+{
+  fs::path filepath = get_resource(basename);
+  Glib::RefPtr<Gdk::Pixbuf> p_pixbuf;
+
+  try {
+    p_pixbuf = Gdk::Pixbuf::create_from_file(filepath.native());
+  }
+  catch(Glib::FileError err) {
+    std::cerr << "Failed to load resource '" << Glib::filename_to_utf8(filepath.native()) << "'. "
+              << "Reason: " << err.what() << std::endl << "Terminating." << std::endl;
+    throw;
+  }
+
+  return p_pixbuf;
+}

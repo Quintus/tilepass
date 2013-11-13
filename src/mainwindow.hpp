@@ -2,6 +2,7 @@
 #define TILEPASS_MAINWINDOW_HPP
 #include "main.hpp"
 #include "tileset_image.hpp"
+#include "arrow_tile.hpp"
 
 class MainWindow: public Gtk::Window
 {
@@ -29,6 +30,7 @@ private:
   Gtk::VBox m_vbox2;
 
   TilesetImage m_tileset;
+  ArrowTile m_arrowtile;
   Gtk::Separator m_vsep1;
 
   Gtk::MenuItem* mp_menu_file;
