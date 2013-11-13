@@ -1,4 +1,3 @@
-#include "main.hpp"
 #include "mainwindow.hpp"
 
 MainWindow::MainWindow()
@@ -67,6 +66,9 @@ void MainWindow::setup_signal_handlers()
 void MainWindow::create_layout()
 {
   m_vbox.pack_start(*mp_menubar, Gtk::PACK_SHRINK);
+  m_vbox.pack_start(m_hbox, Gtk::PACK_EXPAND_WIDGET);
+  m_hbox.pack_start(m_vbox2, Gtk::PACK_EXPAND_WIDGET);
+  m_hbox.pack_start(m_tileset, Gtk::PACK_EXPAND_WIDGET);
 
   add(m_vbox);
 }
@@ -132,5 +134,5 @@ void MainWindow::on_menu_help_about()
 
 void MainWindow::reload_workspace()
 {
-  
+  m_tileset.set_filename(m_img_file);
 }

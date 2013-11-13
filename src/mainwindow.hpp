@@ -1,6 +1,7 @@
 #ifndef TILEPASS_MAINWINDOW_HPP
 #define TILEPASS_MAINWINDOW_HPP
 #include "main.hpp"
+#include "tileset_image.hpp"
 
 class MainWindow: public Gtk::Window
 {
@@ -21,6 +22,10 @@ private:
   void on_menu_help_about();
 
   Gtk::VBox m_vbox;
+  Gtk::HBox m_hbox;
+  Gtk::VBox m_vbox2;
+
+  TilesetImage m_tileset;
 
   Gtk::MenuItem* mp_menu_file;
   Gtk::MenuItem* mp_menu_help;
