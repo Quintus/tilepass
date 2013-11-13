@@ -74,6 +74,8 @@ void MainWindow::setup_signal_handlers()
   mp_menu_file_open->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_open));
   mp_menu_file_quit->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_quit));
   mp_menu_help_about->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_help_about));
+  m_next_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_next_button_clicked));
+  m_prev_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_prev_button_clicked));
 }
 
 void MainWindow::create_layout()
@@ -158,6 +160,18 @@ void MainWindow::on_menu_help_about()
   ad.set_version("0.0.1");
   ad.set_copyright("Copyright © 2013 Marvin Gülker");
   ad.run();
+}
+
+void MainWindow::on_next_button_clicked()
+{
+  Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.next_tile();
+  m_arrowtile.set_tile(p_pixbuf);
+}
+
+void MainWindow::on_prev_button_clicked()
+{
+  Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.prev_tile();
+  m_arrowtile.set_tile(p_pixbuf);
 }
 
 /***************************************

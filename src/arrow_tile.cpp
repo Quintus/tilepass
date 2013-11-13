@@ -48,6 +48,7 @@ ArrowTile::~ArrowTile()
 void ArrowTile::set_tile(Glib::RefPtr<Gdk::Pixbuf> p_pixbuf)
 {
   mp_tile = p_pixbuf;
+  queue_draw();
 }
 
 Glib::RefPtr<Gdk::Pixbuf> ArrowTile::get_tile()

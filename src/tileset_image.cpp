@@ -75,6 +75,7 @@ Glib::RefPtr<Gdk::Pixbuf> TilesetImage::prev_tile()
   if (m_current_y < 0)
     m_current_y = 0;
 
+  m_draw_area.queue_draw();
   return get_current_tile();
 }
 
@@ -92,6 +93,7 @@ Glib::RefPtr<Gdk::Pixbuf> TilesetImage::next_tile()
   if (m_current_y >= rows())
     m_current_y -= 1;
 
+  m_draw_area.queue_draw();
   return get_current_tile();
 }
 

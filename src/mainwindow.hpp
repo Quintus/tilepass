@@ -26,6 +26,8 @@ private:
   void on_menu_file_open();
   void on_menu_file_quit();
   void on_menu_help_about();
+  void on_next_button_clicked();
+  void on_prev_button_clicked();
 
   Gtk::VBox m_vbox;
   Gtk::HBox m_hbox;
