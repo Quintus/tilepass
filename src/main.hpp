@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <stdint.h>
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>

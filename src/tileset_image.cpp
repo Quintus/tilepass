@@ -62,8 +62,30 @@ void TilesetImage::load_tileset_with_directions(Glib::ustring tileset_filename, 
   m_current_y = 0;
   mp_pixbuf   = Gdk::Pixbuf::create_from_file(tileset_filename);
 
-  // FIXME: Load the CSV file instead
-  m_directions.assign(tiles_count(), 0);
+  // Clear list of directions for now (we fill in later)
+  m_directions.clear();
+
+  // Read the directions from the CSV file line-by-line
+  std::ifstream file(Glib::filename_from_utf8(csv_filename).c_str());
+  while (!file.eof()) {
+    std::string line;
+    size_t lastpos = 0;
+    size_t curpos = 0;
+
+    // Grab one line
+    std::getline(file, line);
+
+    // Extract all directions from the current line
+    while ((curpos = line.find(",", lastpos)) != std::string::npos) {
+      std::string number = line.substr(lastpos, curpos);
+
+      // Convert our entry to integer and add it to the direction list.
+      std::cout << "DEBUG: " << number << std::endl;
+      m_directions.push_back(atoi(number.c_str()));
+
+      lastpos = curpos;
+    }
+  }
 
   // Redraw the drawingarea with the new tileset
   m_draw_area.set_size_request(mp_pixbuf->get_width(), mp_pixbuf->get_height());
