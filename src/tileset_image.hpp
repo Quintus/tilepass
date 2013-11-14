@@ -47,6 +47,8 @@ public:
   Glib::ustring get_filename();
   /// Returns the Gdk::Pixbuf created from the image file.
   Glib::RefPtr<Gdk::Pixbuf> get_pixbuf();
+  /// Unload the tileset image and clear all direction definitions.
+  void clear();
 
   // Advance the current tile as requested and return the Pixbuf
   // for that tile.

@@ -54,6 +54,17 @@ void TilesetImage::load_tileset(Glib::ustring filename, int tileedge)
   m_draw_area.set_size_request(mp_pixbuf->get_width(), mp_pixbuf->get_height());
 }
 
+void TilesetImage::clear()
+{
+  m_filename  = "";
+  m_tileedge  = 0;
+  m_current_x = 0;
+  m_current_y = 0;
+  mp_pixbuf.reset();
+  m_directions.clear();
+  m_draw_area.set_size_request(0, 0);
+}
+
 void TilesetImage::load_tileset_with_directions(Glib::ustring tileset_filename, Glib::ustring csv_filename, int tileedge)
 {
   m_filename  = tileset_filename;
