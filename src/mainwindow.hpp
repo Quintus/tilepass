@@ -25,6 +25,8 @@ private:
   void on_menu_file_new();
   void on_menu_file_open();
   void on_menu_file_quit();
+  void on_menu_file_save();
+  void on_menu_file_saveas();
   void on_menu_help_about();
   void on_next_button_clicked();
   void on_prev_button_clicked();

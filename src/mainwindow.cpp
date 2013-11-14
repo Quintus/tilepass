@@ -88,6 +88,8 @@ void MainWindow::setup_signal_handlers()
   // Menu items
   mp_menu_file_new->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_new));
   mp_menu_file_open->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_open));
+  mp_menu_file_save->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_save));
+  mp_menu_file_saveas->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_saveas));
   mp_menu_file_quit->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_quit));
   mp_menu_help_about->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_help_about));
 
@@ -165,7 +167,7 @@ void MainWindow::on_menu_file_open()
   any_filter->set_name("Any files (*)");
   any_filter->add_pattern("*");
 
-  Gtk::FileChooserDialog csv_fd(*this, "Choose the passability file", Gtk::FILE_CHOOSER_ACTION_SAVE);
+  Gtk::FileChooserDialog csv_fd(*this, "Choose the passability file", Gtk::FILE_CHOOSER_ACTION_OPEN);
   csv_fd.add_filter(csv_filter);
   csv_fd.add_filter(any_filter);
   csv_fd.add_button("Cancel", Gtk::RESPONSE_CANCEL);
@@ -188,6 +190,38 @@ void MainWindow::on_menu_file_open()
   m_csv_file = Glib::filename_to_utf8(csv_fd.get_filename());
 
   reload_workspace();
+}
+
+void MainWindow::on_menu_file_save()
+{
+  // If no file has been chosen yet, let the user choose one.
+  // Otherwise just overwrite that file.
+  if (m_csv_file.empty())
+    on_menu_file_saveas();
+  else
+    m_tileset.store_directions(m_csv_file);
+}
+
+void MainWindow::on_menu_file_saveas()
+{
+  Glib::RefPtr<Gtk::FileFilter> csv_filter = Gtk::FileFilter::create();
+  Glib::RefPtr<Gtk::FileFilter> any_filter = Gtk::FileFilter::create();
+  csv_filter->set_name("Comma-separated value files (*.csv)");
+  csv_filter->add_pattern("*.csv");
+  any_filter->set_name("Any files (*)");
+  any_filter->add_pattern("*");
+
+  Gtk::FileChooserDialog csv_fd(*this, "Choose the directions file", Gtk::FILE_CHOOSER_ACTION_SAVE);
+  csv_fd.add_filter(csv_filter);
+  csv_fd.add_filter(any_filter);
+  csv_fd.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+  csv_fd.add_button("OK", Gtk::RESPONSE_OK);
+
+  if (csv_fd.run() != Gtk::RESPONSE_OK)
+    return;
+
+  m_csv_file = Glib::filename_to_utf8(csv_fd.get_filename());
+  m_tileset.store_directions(m_csv_file);
 }
 
 void MainWindow::on_menu_help_about()
