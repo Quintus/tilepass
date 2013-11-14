@@ -1,5 +1,6 @@
 #ifndef TILEPASS_MAIN_HPP
 #define TILEPASS_MAIN_HPP
+#include <stdint.h>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>

@@ -46,9 +46,32 @@ void TilesetImage::load_tileset(Glib::ustring filename, int tileedge)
   m_tileedge  = tileedge;
   m_current_x = 0;
   m_current_y = 0;
+  mp_pixbuf   = Gdk::Pixbuf::create_from_file(filename);
 
-  mp_pixbuf = Gdk::Pixbuf::create_from_file(filename);
+  m_directions.assign(tiles_count(), 0);
+
+  // Redraw the drawingarea with the new tileset
   m_draw_area.set_size_request(mp_pixbuf->get_width(), mp_pixbuf->get_height());
+}
+
+void TilesetImage::load_tileset_with_directions(Glib::ustring tileset_filename, Glib::ustring csv_filename, int tileedge)
+{
+  m_filename  = tileset_filename;
+  m_tileedge  = tileedge;
+  m_current_x = 0;
+  m_current_y = 0;
+  mp_pixbuf   = Gdk::Pixbuf::create_from_file(tileset_filename);
+
+  // FIXME: Load the CSV file instead
+  m_directions.assign(tiles_count(), 0);
+
+  // Redraw the drawingarea with the new tileset
+  m_draw_area.set_size_request(mp_pixbuf->get_width(), mp_pixbuf->get_height());
+}
+
+void TilesetImage::store_directions(Glib::ustring filename)
+{
+  // TODO
 }
 
 Glib::ustring TilesetImage::get_filename()
@@ -124,6 +147,21 @@ int TilesetImage::tiles_count()
 int TilesetImage::get_current_tilenum()
 {
   return m_current_y * columns() + m_current_x; // All tiles of previous rows plus the number of tiles in the current row
+}
+
+uint16_t TilesetImage::get_current_directions()
+{
+  return m_directions[get_current_tilenum()];
+}
+
+void TilesetImage::set_current_directions(uint16_t dir)
+{
+  m_directions[get_current_tilenum()] = dir;
+}
+
+std::vector<uint16_t> TilesetImage::get_directions()
+{
+  return m_directions;
 }
 
 /***************************************
