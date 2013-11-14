@@ -88,13 +88,12 @@ void TilesetImage::load_tileset_with_directions(Glib::ustring tileset_filename, 
 
     // Extract all directions from the current line
     while ((curpos = line.find(",", lastpos)) != std::string::npos) {
-      std::string number = line.substr(lastpos, curpos);
+      std::string number = line.substr(lastpos, curpos - lastpos);
 
       // Convert our entry to integer and add it to the direction list.
-      std::cout << "DEBUG: " << number << std::endl;
       m_directions.push_back(atoi(number.c_str()));
 
-      lastpos = curpos;
+      lastpos = curpos + 1;
     }
   }
 
