@@ -45,13 +45,16 @@ private:
   Gtk::Alignment m_align1;
 
   Gtk::MenuItem* mp_menu_file;
+  Gtk::MenuItem* mp_menu_edit;
   Gtk::MenuItem* mp_menu_help;
   Gtk::Menu* mp_menu_filemenu;
   Gtk::Menu* mp_menu_helpmenu;
+  Gtk::Menu* mp_menu_editmenu;
   Gtk::MenuItem* mp_menu_file_new;
   Gtk::MenuItem* mp_menu_file_open;
   Gtk::SeparatorMenuItem* mp_menu_file_sep1;
   Gtk::MenuItem* mp_menu_file_quit;
+  Gtk::MenuItem* mp_menu_edit_selecttileset;
   Gtk::MenuItem* mp_menu_help_about;
   Gtk::MenuBar* mp_menubar;
 

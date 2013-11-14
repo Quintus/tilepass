@@ -33,6 +33,7 @@ MainWindow::~MainWindow()
 {
   delete mp_menubar;
   delete mp_menu_file;
+  delete mp_menu_edit;
   delete mp_menu_help;
 }
 
@@ -53,6 +54,11 @@ void MainWindow::create_menus()
   mp_menu_filemenu->append(*mp_menu_file_sep1);
   mp_menu_filemenu->append(*mp_menu_file_quit);
 
+  ////////// Edit //////////
+  mp_menu_editmenu = new Gtk::Menu();
+  mp_menu_edit_selecttileset = new Gtk::MenuItem("Select tileset…");
+  mp_menu_editmenu->append(*mp_menu_edit_selecttileset);
+
   ////////// Help //////////
   mp_menu_helpmenu = new Gtk::Menu();
   mp_menu_help_about = new Gtk::MenuItem("About");
@@ -61,12 +67,15 @@ void MainWindow::create_menus()
   ////////// The menubar //////////
   mp_menubar   = new Gtk::MenuBar();
   mp_menu_file = new Gtk::MenuItem("File");
+  mp_menu_edit = new Gtk::MenuItem("Edit");
   mp_menu_help = new Gtk::MenuItem("Help");
 
   mp_menu_file->set_submenu(*mp_menu_filemenu);
+  mp_menu_edit->set_submenu(*mp_menu_editmenu);
   mp_menu_help->set_submenu(*mp_menu_helpmenu);
 
   mp_menubar->append(*mp_menu_file);
+  mp_menubar->append(*mp_menu_edit);
   mp_menubar->append(*mp_menu_help);
 }
 
@@ -116,6 +125,11 @@ void MainWindow::on_menu_file_quit()
 
 void MainWindow::on_menu_file_new()
 {
+  m_tileset.clear();
+}
+
+void MainWindow::on_menu_file_open()
+{
   Glib::RefPtr<Gtk::FileFilter> csv_filter = Gtk::FileFilter::create();
   Glib::RefPtr<Gtk::FileFilter> img_filter = Gtk::FileFilter::create();
   Glib::RefPtr<Gtk::FileFilter> any_filter = Gtk::FileFilter::create();
@@ -149,11 +163,6 @@ void MainWindow::on_menu_file_new()
   m_img_file = Glib::filename_to_utf8(img_fd.get_filename());
 
   reload_workspace();
-}
-
-void MainWindow::on_menu_file_open()
-{
-
 }
 
 void MainWindow::on_menu_help_about()
