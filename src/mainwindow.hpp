@@ -54,7 +54,6 @@ private:
   Gtk::MenuItem* mp_menu_file_open;
   Gtk::SeparatorMenuItem* mp_menu_file_sep1;
   Gtk::MenuItem* mp_menu_file_quit;
-  Gtk::MenuItem* mp_menu_edit_selecttileset;
   Gtk::MenuItem* mp_menu_help_about;
   Gtk::MenuBar* mp_menubar;
 

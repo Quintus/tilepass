@@ -56,8 +56,6 @@ void MainWindow::create_menus()
 
   ////////// Edit //////////
   mp_menu_editmenu = new Gtk::Menu();
-  mp_menu_edit_selecttileset = new Gtk::MenuItem("Select tileset…");
-  mp_menu_editmenu->append(*mp_menu_edit_selecttileset);
 
   ////////// Help //////////
   mp_menu_helpmenu = new Gtk::Menu();
@@ -81,10 +79,13 @@ void MainWindow::create_menus()
 
 void MainWindow::setup_signal_handlers()
 {
+  // Menu items
   mp_menu_file_new->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_new));
   mp_menu_file_open->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_open));
   mp_menu_file_quit->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_quit));
   mp_menu_help_about->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_help_about));
+
+  // Buttons
   m_next_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_next_button_clicked));
   m_prev_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_prev_button_clicked));
 }
@@ -125,7 +126,25 @@ void MainWindow::on_menu_file_quit()
 
 void MainWindow::on_menu_file_new()
 {
-  m_tileset.clear();
+  Glib::RefPtr<Gtk::FileFilter> img_filter = Gtk::FileFilter::create();
+  Glib::RefPtr<Gtk::FileFilter> any_filter = Gtk::FileFilter::create();
+  img_filter->set_name("Image files (*.png)");
+  img_filter->add_pattern("*.png");
+  any_filter->set_name("Any files (*)");
+  any_filter->add_pattern("*");
+
+  Gtk::FileChooserDialog fd(*this, "Choose the tileset image file", Gtk::FILE_CHOOSER_ACTION_OPEN);
+  fd.add_filter(img_filter);
+  fd.add_filter(any_filter);
+  fd.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+  fd.add_button("OK", Gtk::RESPONSE_OK);
+
+  if (fd.run() != Gtk::RESPONSE_OK)
+    return;
+
+  m_img_file = Glib::filename_to_utf8(fd.get_filename());
+  m_csv_file = "";
+  reload_workspace();
 }
 
 void MainWindow::on_menu_file_open()
@@ -152,15 +171,15 @@ void MainWindow::on_menu_file_open()
   img_fd.add_button("Cancel", Gtk::RESPONSE_CANCEL);
   img_fd.add_button("OK", Gtk::RESPONSE_OK);
 
-  if (csv_fd.run() != Gtk::RESPONSE_OK)
-    return;
-  csv_fd.hide();
-
   if (img_fd.run() != Gtk::RESPONSE_OK)
     return;
+  img_fd.hide();
 
-  m_csv_file = Glib::filename_to_utf8(csv_fd.get_filename());
+  if (csv_fd.run() != Gtk::RESPONSE_OK)
+    return;
+
   m_img_file = Glib::filename_to_utf8(img_fd.get_filename());
+  m_csv_file = Glib::filename_to_utf8(csv_fd.get_filename());
 
   reload_workspace();
 }
@@ -193,7 +212,11 @@ void MainWindow::on_prev_button_clicked()
 
 void MainWindow::reload_workspace()
 {
-  m_tileset.load_tileset(m_img_file, 32); // FIXME: Make tile edge length configurable
+  if (m_csv_file.empty()) // New work, no CSV file
+    m_tileset.load_tileset(m_img_file, 32); // FIXME: Make tile edge length configurable
+  else // We have a CSV file
+    m_tileset.load_tileset_with_directions(m_img_file, m_csv_file, 32); // FIXME: See above
+
   m_arrowtile.set_tile(m_tileset.get_current_tile());
   update_progress();
 }
