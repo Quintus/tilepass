@@ -44,14 +44,20 @@ MainWindow::~MainWindow()
 void MainWindow::create_menus()
 {
   ////////// File //////////
-  mp_menu_filemenu  = new Gtk::Menu();
-  mp_menu_file_new  = new Gtk::MenuItem("New");
-  mp_menu_file_open = new Gtk::MenuItem("Open");
-  mp_menu_file_sep1 = new Gtk::SeparatorMenuItem();
-  mp_menu_file_quit = new Gtk::MenuItem("Quit");
+  mp_menu_filemenu    = new Gtk::Menu();
+  mp_menu_file_new    = new Gtk::MenuItem("New");
+  mp_menu_file_open   = new Gtk::MenuItem("Open");
+  mp_menu_file_sep1   = new Gtk::SeparatorMenuItem();
+  mp_menu_file_save   = new Gtk::MenuItem("Save");
+  mp_menu_file_saveas = new Gtk::MenuItem("Save as…");
+  mp_menu_file_sep2   = new Gtk::SeparatorMenuItem();
+  mp_menu_file_quit   = new Gtk::MenuItem("Quit");
   mp_menu_filemenu->append(*mp_menu_file_new);
   mp_menu_filemenu->append(*mp_menu_file_open);
   mp_menu_filemenu->append(*mp_menu_file_sep1);
+  mp_menu_filemenu->append(*mp_menu_file_save);
+  mp_menu_filemenu->append(*mp_menu_file_saveas);
+  mp_menu_filemenu->append(*mp_menu_file_sep2);
   mp_menu_filemenu->append(*mp_menu_file_quit);
 
   ////////// Edit //////////

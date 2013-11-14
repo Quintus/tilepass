@@ -52,7 +52,10 @@ private:
   Gtk::Menu* mp_menu_editmenu;
   Gtk::MenuItem* mp_menu_file_new;
   Gtk::MenuItem* mp_menu_file_open;
+  Gtk::MenuItem* mp_menu_file_save;
+  Gtk::MenuItem* mp_menu_file_saveas;
   Gtk::SeparatorMenuItem* mp_menu_file_sep1;
+  Gtk::SeparatorMenuItem* mp_menu_file_sep2;
   Gtk::MenuItem* mp_menu_file_quit;
   Gtk::MenuItem* mp_menu_help_about;
   Gtk::MenuBar* mp_menubar;
