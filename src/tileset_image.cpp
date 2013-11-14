@@ -71,7 +71,24 @@ void TilesetImage::load_tileset_with_directions(Glib::ustring tileset_filename, 
 
 void TilesetImage::store_directions(Glib::ustring filename)
 {
-  // TODO
+  std::ofstream file(Glib::filename_from_utf8(filename).c_str());
+
+  if (!file)
+    throw(std::runtime_error("Could not open CSV file."));
+
+  std::vector<uint16_t>::const_iterator iter; // shorthand
+  int ncolumns = columns(); // shorthand
+  int i;
+  for(iter=m_directions.begin(), i=0; iter != m_directions.end(); iter++, i++) {
+    file << *iter;
+
+    if(div(i + 1, ncolumns).rem == 0) // (i + 1) mod ncolumns == 0
+      file << std::endl;
+    else
+      file << ",";
+  }
+
+  file.close();
 }
 
 Glib::ustring TilesetImage::get_filename()
