@@ -198,8 +198,12 @@ void MainWindow::on_menu_file_save()
   // Otherwise just overwrite that file.
   if (m_csv_file.empty())
     on_menu_file_saveas();
-  else
+  else {
+    // Save the directions on the current tile
+    m_tileset.set_current_directions(m_arrowtile.get_directions());
+    // Store everything in the file
     m_tileset.store_directions(m_csv_file);
+  }
 }
 
 void MainWindow::on_menu_file_saveas()
@@ -221,7 +225,7 @@ void MainWindow::on_menu_file_saveas()
     return;
 
   m_csv_file = Glib::filename_to_utf8(csv_fd.get_filename());
-  m_tileset.store_directions(m_csv_file);
+  on_menu_file_save();
 }
 
 void MainWindow::on_menu_help_about()
@@ -265,7 +269,7 @@ void MainWindow::reload_workspace()
   else // We have a CSV file
     m_tileset.load_tileset_with_directions(m_img_file, m_csv_file, 32); // FIXME: See above
 
-  m_arrowtile.set_tile(m_tileset.get_current_tile());
+  m_arrowtile.set_tile_with_directions(m_tileset.get_current_tile(), m_tileset.get_current_directions());
   update_progress();
 }
 
