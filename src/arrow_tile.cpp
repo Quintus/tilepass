@@ -64,6 +64,14 @@ void ArrowTile::setup_signal_handlers()
 void ArrowTile::set_tile(Glib::RefPtr<Gdk::Pixbuf> p_pixbuf)
 {
   mp_tile = p_pixbuf;
+  m_show_directions = 0;
+  queue_draw();
+}
+
+void ArrowTile::set_tile_with_directions(Glib::RefPtr<Gdk::Pixbuf> p_pixbuf, uint16_t directions)
+{
+  mp_tile = p_pixbuf;
+  m_show_directions = directions;
   queue_draw();
 }
 

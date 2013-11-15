@@ -8,7 +8,14 @@ public:
   ArrowTile();
   virtual ~ArrowTile();
 
+  /// Change the current tile, resetting the arrow information to 0
+  /// (no arrows are active).
   void set_tile(Glib::RefPtr<Gdk::Pixbuf> p_pixbuf);
+  /// Change the current tile, resetting the arrow information to the
+  /// given bit-OR’ed value of the ArrowDirection enum.
+  void set_tile_with_directions(Glib::RefPtr<Gdk::Pixbuf> p_pixbuf, uint16_t directions);
+
+  // Return the current tile.
   Glib::RefPtr<Gdk::Pixbuf> get_tile();
 
   // Show or hide one of the arrows. `direction' can be taken

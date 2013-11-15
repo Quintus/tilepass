@@ -234,15 +234,23 @@ void MainWindow::on_menu_help_about()
 
 void MainWindow::on_next_button_clicked()
 {
+  // Save the directions on the current tile
+  m_tileset.set_current_directions(m_arrowtile.get_directions());
+
+  // Switch to the new tile, restoring any saved directions
   Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.next_tile();
-  m_arrowtile.set_tile(p_pixbuf);
+  m_arrowtile.set_tile_with_directions(p_pixbuf, m_tileset.get_current_directions());
   update_progress();
 }
 
 void MainWindow::on_prev_button_clicked()
 {
+  // Save the directions on the current tile
+  m_tileset.set_current_directions(m_arrowtile.get_directions());
+
+  // Switch to the new tile, restoring any saved directions.
   Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.prev_tile();
-  m_arrowtile.set_tile(p_pixbuf);
+  m_arrowtile.set_tile_with_directions(p_pixbuf, m_tileset.get_current_directions());
   update_progress();
 }
 
