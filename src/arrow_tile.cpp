@@ -87,6 +87,16 @@ void ArrowTile::toggle_arrow(uint16_t direction)
   m_show_directions ^= direction;
 }
 
+bool ArrowTile::is_active(uint16_t direction)
+{
+  return (m_show_directions & direction) == direction;
+}
+
+uint16_t ArrowTile::get_directions()
+{
+  return m_show_directions;
+}
+
 /***************************************
  * Signal handlers
  ***************************************/

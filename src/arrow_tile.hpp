@@ -16,6 +16,11 @@ public:
   void show_arrow(uint16_t direction);
   void hide_arrow(uint16_t direction);
   void toggle_arrow(uint16_t direction);
+  // Check whether an arrow of the given direction is active.
+  bool is_active(uint16_t direction);
+  // Returns the entire direction mask; a bit-OR’ed combination
+  // of the values in the ArrowDirection enum.
+  uint16_t get_directions();
 
 protected:
   virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cc);
