@@ -28,6 +28,11 @@ private:
   void on_menu_file_save();
   void on_menu_file_saveas();
   void on_menu_edit_uparrow();
+  void on_menu_edit_rightarrow();
+  void on_menu_edit_downarrow();
+  void on_menu_edit_leftarrow();
+  void on_menu_edit_prev();
+  void on_menu_edit_next();
   void on_menu_help_about();
   void on_next_button_clicked();
   void on_prev_button_clicked();

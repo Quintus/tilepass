@@ -83,16 +83,19 @@ Glib::RefPtr<Gdk::Pixbuf> ArrowTile::get_tile()
 void ArrowTile::show_arrow(uint16_t direction)
 {
   m_show_directions |= direction;
+  queue_draw();
 }
 
 void ArrowTile::hide_arrow(uint16_t direction)
 {
   m_show_directions &= ~direction;
+  queue_draw();
 }
 
 void ArrowTile::toggle_arrow(uint16_t direction)
 {
   m_show_directions ^= direction;
+  queue_draw();
 }
 
 bool ArrowTile::is_active(uint16_t direction)
@@ -171,6 +174,5 @@ bool ArrowTile::on_button_released(GdkEventButton* p_event)
       toggle_arrow(DIRECTION_RIGHT);
   }
 
-  queue_draw();
   return true;
 }

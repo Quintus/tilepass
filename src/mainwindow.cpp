@@ -87,8 +87,8 @@ void MainWindow::create_menus()
   mp_menu_editmenu->append(*mp_menu_edit_downarrow);
   mp_menu_editmenu->append(*mp_menu_edit_leftarrow);
 
-  mp_menu_edit_prev->add_accelerator("activate", mp_accel_group, GDK_KEY_Return, static_cast<Gdk::ModifierType>(0), Gtk::ACCEL_VISIBLE);
-  mp_menu_edit_next->add_accelerator("activate", mp_accel_group, GDK_KEY_BackSpace, static_cast<Gdk::ModifierType>(0), Gtk::ACCEL_VISIBLE);
+  mp_menu_edit_prev->add_accelerator("activate", mp_accel_group, GDK_KEY_BackSpace,Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+  mp_menu_edit_next->add_accelerator("activate", mp_accel_group, GDK_KEY_Return, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
   mp_menu_edit_uparrow->add_accelerator("activate", mp_accel_group, GDK_KEY_Up, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
   mp_menu_edit_rightarrow->add_accelerator("activate", mp_accel_group, GDK_KEY_Right, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
   mp_menu_edit_downarrow->add_accelerator("activate", mp_accel_group, GDK_KEY_Down, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
@@ -147,7 +147,12 @@ void MainWindow::setup_signal_handlers()
   mp_menu_file_save->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_save));
   mp_menu_file_saveas->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_saveas));
   mp_menu_file_quit->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_quit));
+  mp_menu_edit_prev->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_edit_prev));
+  mp_menu_edit_next->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_edit_next));
   mp_menu_edit_uparrow->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_edit_uparrow));
+  mp_menu_edit_rightarrow->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_edit_rightarrow));
+  mp_menu_edit_downarrow->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_edit_downarrow));
+  mp_menu_edit_leftarrow->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_edit_leftarrow));
   mp_menu_help_about->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_help_about));
 
   // Buttons
@@ -260,9 +265,46 @@ void MainWindow::on_menu_file_saveas()
   on_menu_file_save();
 }
 
+void MainWindow::on_menu_edit_prev()
+{
+  // Save the directions on the current tile
+  m_tileset.set_current_directions(m_arrowtile.get_directions());
+
+  // Switch to the new tile, restoring any saved directions.
+  Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.prev_tile();
+  m_arrowtile.set_tile_with_directions(p_pixbuf, m_tileset.get_current_directions());
+  update_progress();
+}
+
+void MainWindow::on_menu_edit_next()
+{
+  // Save the directions on the current tile
+  m_tileset.set_current_directions(m_arrowtile.get_directions());
+
+  // Switch to the new tile, restoring any saved directions
+  Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.next_tile();
+  m_arrowtile.set_tile_with_directions(p_pixbuf, m_tileset.get_current_directions());
+  update_progress();
+}
+
 void MainWindow::on_menu_edit_uparrow()
 {
-  std::cout << "!!" << std::endl;
+  m_arrowtile.toggle_arrow(DIRECTION_UP);
+}
+
+void MainWindow::on_menu_edit_rightarrow()
+{
+  m_arrowtile.toggle_arrow(DIRECTION_RIGHT);
+}
+
+void MainWindow::on_menu_edit_downarrow()
+{
+  m_arrowtile.toggle_arrow(DIRECTION_DOWN);
+}
+
+void MainWindow::on_menu_edit_leftarrow()
+{
+  m_arrowtile.toggle_arrow(DIRECTION_LEFT);
 }
 
 void MainWindow::on_menu_help_about()
@@ -275,24 +317,12 @@ void MainWindow::on_menu_help_about()
 
 void MainWindow::on_next_button_clicked()
 {
-  // Save the directions on the current tile
-  m_tileset.set_current_directions(m_arrowtile.get_directions());
-
-  // Switch to the new tile, restoring any saved directions
-  Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.next_tile();
-  m_arrowtile.set_tile_with_directions(p_pixbuf, m_tileset.get_current_directions());
-  update_progress();
+  on_menu_edit_next();
 }
 
 void MainWindow::on_prev_button_clicked()
 {
-  // Save the directions on the current tile
-  m_tileset.set_current_directions(m_arrowtile.get_directions());
-
-  // Switch to the new tile, restoring any saved directions.
-  Glib::RefPtr<Gdk::Pixbuf> p_pixbuf = m_tileset.prev_tile();
-  m_arrowtile.set_tile_with_directions(p_pixbuf, m_tileset.get_current_directions());
-  update_progress();
+  on_menu_edit_prev();
 }
 
 /***************************************
