@@ -62,6 +62,8 @@ void MainWindow::create_menus()
 
   ////////// Edit //////////
   mp_menu_editmenu = new Gtk::Menu();
+  mp_menu_edit_uparrow = new Gtk::MenuItem("Pass upwards");
+  mp_menu_editmenu->append(*mp_menu_edit_uparrow);
 
   ////////// Help //////////
   mp_menu_helpmenu = new Gtk::Menu();
@@ -81,21 +83,6 @@ void MainWindow::create_menus()
   mp_menubar->append(*mp_menu_file);
   mp_menubar->append(*mp_menu_edit);
   mp_menubar->append(*mp_menu_help);
-}
-
-void MainWindow::setup_signal_handlers()
-{
-  // Menu items
-  mp_menu_file_new->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_new));
-  mp_menu_file_open->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_open));
-  mp_menu_file_save->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_save));
-  mp_menu_file_saveas->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_saveas));
-  mp_menu_file_quit->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_quit));
-  mp_menu_help_about->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_help_about));
-
-  // Buttons
-  m_next_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_next_button_clicked));
-  m_prev_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_prev_button_clicked));
 }
 
 void MainWindow::create_layout()
@@ -121,6 +108,22 @@ void MainWindow::create_layout()
   m_hbox.pack_start(m_tileset, Gtk::PACK_EXPAND_WIDGET);
 
   add(m_vbox);
+}
+
+void MainWindow::setup_signal_handlers()
+{
+  // Menu items
+  mp_menu_file_new->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_new));
+  mp_menu_file_open->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_open));
+  mp_menu_file_save->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_save));
+  mp_menu_file_saveas->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_saveas));
+  mp_menu_file_quit->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_file_quit));
+  mp_menu_edit_uparrow->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_edit_uparrow));
+  mp_menu_help_about->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_menu_help_about));
+
+  // Buttons
+  m_next_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_next_button_clicked));
+  m_prev_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_prev_button_clicked));
 }
 
 /***************************************
@@ -226,6 +229,11 @@ void MainWindow::on_menu_file_saveas()
 
   m_csv_file = Glib::filename_to_utf8(csv_fd.get_filename());
   on_menu_file_save();
+}
+
+void MainWindow::on_menu_edit_uparrow()
+{
+  std::cout << "!!" << std::endl;
 }
 
 void MainWindow::on_menu_help_about()

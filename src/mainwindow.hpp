@@ -27,6 +27,7 @@ private:
   void on_menu_file_quit();
   void on_menu_file_save();
   void on_menu_file_saveas();
+  void on_menu_edit_uparrow();
   void on_menu_help_about();
   void on_next_button_clicked();
   void on_prev_button_clicked();
@@ -59,6 +60,7 @@ private:
   Gtk::SeparatorMenuItem* mp_menu_file_sep1;
   Gtk::SeparatorMenuItem* mp_menu_file_sep2;
   Gtk::MenuItem* mp_menu_file_quit;
+  Gtk::MenuItem* mp_menu_edit_uparrow;
   Gtk::MenuItem* mp_menu_help_about;
   Gtk::MenuBar* mp_menubar;
 
