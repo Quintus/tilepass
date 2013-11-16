@@ -64,6 +64,12 @@ void MainWindow::create_menus()
   mp_menu_filemenu->append(*mp_menu_file_sep2);
   mp_menu_filemenu->append(*mp_menu_file_quit);
 
+  mp_menu_file_new->add_accelerator("activate", mp_accel_group, GDK_KEY_N, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+  mp_menu_file_open->add_accelerator("activate", mp_accel_group, GDK_KEY_O, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+  mp_menu_file_save->add_accelerator("activate", mp_accel_group, GDK_KEY_S, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+  mp_menu_file_saveas->add_accelerator("activate", mp_accel_group, GDK_KEY_S, Gdk::SHIFT_MASK | Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+  mp_menu_file_quit->add_accelerator("activate", mp_accel_group, GDK_KEY_Q, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+
   ////////// Edit //////////
   mp_menu_editmenu = new Gtk::Menu();
   mp_menu_edit_uparrow = new Gtk::MenuItem("Pass upwards");
