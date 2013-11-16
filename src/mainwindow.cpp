@@ -73,9 +73,18 @@ void MainWindow::create_menus()
   ////////// Edit //////////
   mp_menu_editmenu = new Gtk::Menu();
   mp_menu_edit_uparrow = new Gtk::MenuItem("Pass upwards");
+  mp_menu_edit_rightarrow = new Gtk::MenuItem("Pass rightwards");
+  mp_menu_edit_downarrow = new Gtk::MenuItem("Pass downwards");
+  mp_menu_edit_leftarrow = new Gtk::MenuItem("Pass leftwards");
   mp_menu_editmenu->append(*mp_menu_edit_uparrow);
+  mp_menu_editmenu->append(*mp_menu_edit_rightarrow);
+  mp_menu_editmenu->append(*mp_menu_edit_downarrow);
+  mp_menu_editmenu->append(*mp_menu_edit_leftarrow);
 
   mp_menu_edit_uparrow->add_accelerator("activate", mp_accel_group, GDK_KEY_Up, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+  mp_menu_edit_rightarrow->add_accelerator("activate", mp_accel_group, GDK_KEY_Right, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+  mp_menu_edit_downarrow->add_accelerator("activate", mp_accel_group, GDK_KEY_Down, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
+  mp_menu_edit_leftarrow->add_accelerator("activate", mp_accel_group, GDK_KEY_Left, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
 
   ////////// Help //////////
   mp_menu_helpmenu = new Gtk::Menu();
