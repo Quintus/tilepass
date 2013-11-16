@@ -61,6 +61,9 @@ private:
   Gtk::SeparatorMenuItem* mp_menu_file_sep1;
   Gtk::SeparatorMenuItem* mp_menu_file_sep2;
   Gtk::MenuItem* mp_menu_file_quit;
+  Gtk::MenuItem* mp_menu_edit_prev;
+  Gtk::MenuItem* mp_menu_edit_next;
+  Gtk::SeparatorMenuItem* mp_menu_edit_sep1;
   Gtk::MenuItem* mp_menu_edit_uparrow;
   Gtk::MenuItem* mp_menu_edit_downarrow;
   Gtk::MenuItem* mp_menu_edit_leftarrow;
