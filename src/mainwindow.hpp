@@ -47,6 +47,7 @@ private:
   Gtk::Separator m_hsep1;
   Gtk::Alignment m_align1;
 
+  Glib::RefPtr<Gtk::AccelGroup> mp_accel_group;
   Gtk::MenuItem* mp_menu_file;
   Gtk::MenuItem* mp_menu_edit;
   Gtk::MenuItem* mp_menu_help;

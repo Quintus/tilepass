@@ -43,6 +43,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::create_menus()
 {
+  // Add an accelerator group to the window we will fill in below
+  mp_accel_group = Gtk::AccelGroup::create();
+  add_accel_group(mp_accel_group);
+
   ////////// File //////////
   mp_menu_filemenu    = new Gtk::Menu();
   mp_menu_file_new    = new Gtk::MenuItem("New");
@@ -64,6 +68,8 @@ void MainWindow::create_menus()
   mp_menu_editmenu = new Gtk::Menu();
   mp_menu_edit_uparrow = new Gtk::MenuItem("Pass upwards");
   mp_menu_editmenu->append(*mp_menu_edit_uparrow);
+
+  mp_menu_edit_uparrow->add_accelerator("activate", mp_accel_group, GDK_KEY_Up, Gdk::CONTROL_MASK, Gtk::ACCEL_VISIBLE);
 
   ////////// Help //////////
   mp_menu_helpmenu = new Gtk::Menu();
