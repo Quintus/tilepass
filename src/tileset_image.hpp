@@ -8,6 +8,9 @@ public:
   TilesetImage();
   virtual ~TilesetImage();
 
+  /// Selection signal, containing the X and Y tile position.
+  typedef sigc::signal<void, int, int> type_signal_selected;
+
   /// Load the given tileset file into the widget. `tileedge` is
   /// the length of the tile's edges (it must be quadratic).
   void load_tileset(Glib::ustring filename, int tileedge);
@@ -29,6 +32,7 @@ public:
   Glib::RefPtr<Gdk::Pixbuf> prev_tile();
   Glib::RefPtr<Gdk::Pixbuf> next_tile();
   Glib::RefPtr<Gdk::Pixbuf> get_current_tile();
+  Glib::RefPtr<Gdk::Pixbuf> set_current_tile(int x, int y);
 
   // Number of tiles in a column of the current tileset.
   int rows();
@@ -53,8 +57,13 @@ public:
    */
   std::vector<uint16_t> get_directions();
 
+  /// Signal emitted when a specific tile is selected
+  /// by the user.
+  type_signal_selected signal_selected();
+
 protected:
   virtual bool on_area_draw(const Cairo::RefPtr<Cairo::Context>& cc);
+  virtual bool on_area_button_released(GdkEventButton* p_event);
 
   void create_layout();
   void setup_event_handlers();
@@ -72,6 +81,8 @@ protected:
   int m_current_y;
 
   std::vector<uint16_t> m_directions;
+
+  type_signal_selected m_signal_selected;
 };
 
 #endif

@@ -33,7 +33,10 @@ void TilesetImage::create_layout()
 
 void TilesetImage::setup_event_handlers()
 {
+  m_draw_area.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
+
   m_draw_area.signal_draw().connect(sigc::mem_fun(*this, &TilesetImage::on_area_draw));
+  m_draw_area.signal_button_release_event().connect(sigc::mem_fun(*this, &TilesetImage::on_area_button_released));
 }
 
 /***************************************
@@ -169,6 +172,27 @@ Glib::RefPtr<Gdk::Pixbuf> TilesetImage::next_tile()
   return get_current_tile();
 }
 
+Glib::RefPtr<Gdk::Pixbuf> TilesetImage::set_current_tile(int x, int y)
+{
+  m_current_x = x;
+  m_current_y = y;
+
+  // Fix X values out of range
+  if (m_current_x < 0)
+    m_current_x = 0;
+  else if (m_current_x >= columns())
+    m_current_x = columns() - 1;
+
+  // Fix Y values out of range
+  if (m_current_y < 0)
+    m_current_y = 0;
+  else if (m_current_y >= rows())
+    m_current_y = rows() - 1;
+
+  m_draw_area.queue_draw();
+  return get_current_tile();
+}
+
 Glib::RefPtr<Gdk::Pixbuf> TilesetImage::get_current_tile()
 {
   return Gdk::Pixbuf::create_subpixbuf(mp_pixbuf,
@@ -238,4 +262,19 @@ bool TilesetImage::on_area_draw(const Cairo::RefPtr<Cairo::Context>& cc)
   }
   else
     return false;
+}
+
+TilesetImage::type_signal_selected TilesetImage::signal_selected()
+{
+  return m_signal_selected;
+}
+
+bool TilesetImage::on_area_button_released(GdkEventButton* p_event)
+{
+  int x = p_event->x / 32;
+  int y = p_event->y / 32;
+
+  set_current_tile(x, y);
+  m_signal_selected.emit(x, y);
+  return true;
 }
