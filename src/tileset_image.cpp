@@ -237,6 +237,11 @@ std::vector<uint16_t> TilesetImage::get_directions()
   return m_directions;
 }
 
+void TilesetImage::set_directions(int index, uint16_t directions)
+{
+  m_directions[index] = directions;
+}
+
 /***************************************
  * Signal handlers
  ***************************************/
@@ -273,8 +278,10 @@ bool TilesetImage::on_area_button_released(GdkEventButton* p_event)
 {
   int x = p_event->x / 32;
   int y = p_event->y / 32;
+  int oldtilenum = get_current_tilenum();
 
   set_current_tile(x, y);
-  m_signal_selected.emit(x, y);
+
+  m_signal_selected.emit(oldtilenum);
   return true;
 }

@@ -8,8 +8,9 @@ public:
   TilesetImage();
   virtual ~TilesetImage();
 
-  /// Selection signal, containing the X and Y tile position.
-  typedef sigc::signal<void, int, int> type_signal_selected;
+  /// Selection signal, containing the index in the
+  /// directions vector from *before* the switch.
+  typedef sigc::signal<void, int> type_signal_selected;
 
   /// Load the given tileset file into the widget. `tileedge` is
   /// the length of the tile's edges (it must be quadratic).
@@ -56,6 +57,8 @@ public:
    * the values by means of bitwise AND.
    */
   std::vector<uint16_t> get_directions();
+  /// Set the direction of the tile with the given index.
+  void set_directions(int index, uint16_t directions);
 
   /// Signal emitted when a specific tile is selected
   /// by the user.

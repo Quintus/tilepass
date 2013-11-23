@@ -36,6 +36,7 @@ private:
   void on_menu_help_about();
   void on_next_button_clicked();
   void on_prev_button_clicked();
+  void on_tile_selected(int oldindex);
 
   Gtk::VBox m_vbox;
   Gtk::HBox m_hbox;

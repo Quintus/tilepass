@@ -158,6 +158,9 @@ void MainWindow::setup_signal_handlers()
   // Buttons
   m_next_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_next_button_clicked));
   m_prev_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_prev_button_clicked));
+
+  // Other
+  m_tileset.signal_selected().connect(sigc::mem_fun(*this, &MainWindow::on_tile_selected));
 }
 
 /***************************************
@@ -323,6 +326,17 @@ void MainWindow::on_next_button_clicked()
 void MainWindow::on_prev_button_clicked()
 {
   on_menu_edit_prev();
+}
+
+void MainWindow::on_tile_selected(int oldindex)
+{
+  // Save the directions on the old tile
+  m_tileset.set_directions(oldindex, m_arrowtile.get_directions());
+
+  // Switch to the new tile, restoring any saved directions
+  m_arrowtile.set_tile_with_directions(m_tileset.get_current_tile(),
+                                       m_tileset.get_current_directions());
+  update_progress();
 }
 
 /***************************************
